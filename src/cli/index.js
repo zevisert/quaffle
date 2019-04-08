@@ -5,8 +5,13 @@ const enquirer = require("enquirer")
 
 const languages = require("../language")
 
+/*
+ * The main entry point to quaffle.
+ * Allows tests to override prompt function
+ */
 async function main({glob_path=null, Prompt=enquirer.prompt}) {
 
+    // No glob path provided, start by prompting the user
     if (!glob_path) {
         try {
             const answer = await Prompt([{
@@ -28,6 +33,7 @@ async function main({glob_path=null, Prompt=enquirer.prompt}) {
     const files = glob.sync(glob_path)
     
     try {
+        // Prompt to select a language to process
         let answer = await Prompt([{
             type: 'select',
             name: 'language',
@@ -42,10 +48,12 @@ async function main({glob_path=null, Prompt=enquirer.prompt}) {
             ]
         }])
 
+        // Quit if other language selected
         if (answer.language === "other") {
             console.log(chalk.red('Analysis in other languages is a work in progress'))
             process.exit(1)
         } else {
+            // Select language rules
             let language = Object.values(languages).find(lang => lang.choice_name = answer.language)
 
             answer = await Prompt([{
@@ -55,6 +63,7 @@ async function main({glob_path=null, Prompt=enquirer.prompt}) {
                 choices: language.rule_names
             }])
             
+            // Perform rule checks
             await language.operations({ files, enabled_rules: answer.rules })
         }
     } catch (e) {

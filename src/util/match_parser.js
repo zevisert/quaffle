@@ -1,39 +1,12 @@
 
-module.exports.match = {
-    defaultarg: (text, arg) => {
-        return _match({
-            text,
-            pattern: `${arg}\\s*=\\s*(.*)`,
-            isdone: (char, paired) => {
-                return false
-                || (char == ")" && paired.get("(") === -1 && Array.from(paired.values()).filter(v => v === 0).length === paired.size - 1)
-                || (char == "," && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
-            }
-        })
-    },
-    annotation: (text, arg) => {
-        return _match({
-            text,
-            pattern: `${arg}\\s*:\\s*(.*)`,
-            isdone: (char, paired) => {
-                return false
-                || (char == ")" && paired.get("(") === -1 && Array.from(paired.values()).filter(v => v === 0).length === paired.size - 1)
-                || (char == "," && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
-            }
-        })
-    },
-    returntype: (text) => {
-        return _match({
-            text,
-            pattern: `->\\s*(.*)`,
-            isdone: (char, paired) => {
-                return false
-                || (char == ":" && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
-            }
-        })
-    }
-}
-
+/*
+ * A function using maps to track opening and closing of forms of brackets
+ * This is used for extraction of values based on file contents
+ * See test/test_signatures for an idea of why this is useful
+ * The { @param text } is the text to search within
+ * The { @param pattern } is the pattern to start the search from
+ * The { @param isdone } is a function to determine if the search is done
+ */
 function _match({ text="", pattern="", isdone }) {
 
     const paired = new Map([
@@ -92,4 +65,42 @@ function _match({ text="", pattern="", isdone }) {
     }
 
     return null
+}
+
+/*
+ * Various types of matching algoritms for python
+ */
+module.exports.match = {
+    defaultarg: (text, arg) => {
+        return _match({
+            text,
+            pattern: `${arg}\\s*=\\s*(.*)`,
+            isdone: (char, paired) => {
+                return false
+                || (char == ")" && paired.get("(") === -1 && Array.from(paired.values()).filter(v => v === 0).length === paired.size - 1)
+                || (char == "," && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
+            }
+        })
+    },
+    annotation: (text, arg) => {
+        return _match({
+            text,
+            pattern: `${arg}\\s*:\\s*(.*)`,
+            isdone: (char, paired) => {
+                return false
+                || (char == ")" && paired.get("(") === -1 && Array.from(paired.values()).filter(v => v === 0).length === paired.size - 1)
+                || (char == "," && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
+            }
+        })
+    },
+    returntype: (text) => {
+        return _match({
+            text,
+            pattern: `->\\s*(.*)`,
+            isdone: (char, paired) => {
+                return false
+                || (char == ":" && Array.from(paired.values()).filter(v => v === 0).length === paired.size)
+            }
+        })
+    }
 }

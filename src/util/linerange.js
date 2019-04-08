@@ -1,13 +1,22 @@
 const readline = require("readline")
 const fs = require("fs")
 
+/*
+ * RangeError formatting function
+ */
 function outOfRangeError(path, from, to, cursor) {
     return new RangeError(
         `Requested lines from ${from} to ${to} but '${path}' has only ${cursor} lines`
     )
 }
 
-module.exports.linerange = function({ path, at, until=undefined }) {
+/*
+ * Reads a section of a file to a buffer specified by line numbers
+ * The { @param path } is the input file
+ * The { @param at } is start of the requested section
+ * The { @param unitl } is the end of the requested section
+ */
+function linerange({ path, at, until=undefined }) {
     if (until === undefined) {
         until = at + 1
     }
@@ -49,3 +58,5 @@ module.exports.linerange = function({ path, at, until=undefined }) {
         })
     })
 }
+
+module.exports.linerange = linerange

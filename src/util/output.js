@@ -15,6 +15,11 @@ function patchtimestamp(d) {
     return `${YYYY}-${width(MM, 2)}-${width(DD, 2)} ${width(hh, 2)}:${width(mm, 2)}:${width(ss, 2)}.000000000 -${width(tz, 4)}`
 }
 
+/*
+ * A function to generate patch files based on quaffles snippet edits
+ * The { @param patches } is a dict of edits for each file
+ * The { @param output } is a console to log output to
+ */
 async function output_patches({ patches, output=console }) {
     let patchfile = []
     const now = new Date()

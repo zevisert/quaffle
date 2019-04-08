@@ -43,16 +43,24 @@ function fix(node, preview, tree) {
         message: 'Add typings for arguments',
         required: false,
         fields: [],
+
+        /*
+         * Builds the prompt template from the { @arg node } and { @arg preview }
+         * Python function arguments are quite complex
+         */
         template: () => {
 
             const searchstring = preview.map(s => s.trim()).join(" ")
             let last_arg = undefined
             const args = node.args
 
+            // Keyword argument captures always have ** prepended
             if (args.kwarg)  {
                 args.kwarg.arg  = `**${args.kwarg.arg}`
             }
 
+            // Variant arguments always have * prepended, but don't need to 
+            // have a variable name assigned
             if (args.vararg !== null) {
                 args.vararg.arg = `*${args.vararg.arg}`
             } else if (args.kwonlyargs && args.kwonlyargs.length > 0) {
@@ -65,6 +73,7 @@ function fix(node, preview, tree) {
                 }
             }
 
+            // Make a list of all the parts that go into a function's parameters
             const parts = [
                 ...args.args,
                 ...args.defaults,
@@ -74,9 +83,14 @@ function fix(node, preview, tree) {
                 args.vararg
             ].filter(part => part !== null)
 
+            // Construct the template for the parameters part of the function signature
             const params_templ = parts.length === 0 ? "" : parts
+                // Order the available parts by increasing line number and column offset 
                 .sort((a, b) => a.lineno === b.lineno ? a.col_offset - b.col_offset : a.lineno - b.lineno)
+                // Join the parts with the appropriate separator syntax and templates to fill in missing pieces 
                 .reduce((result, part) => {
+
+                    // Arguments and annotations
                     if (part.ast_type === "arg") {
                         last_arg = part.arg
                         let arg = `${part.arg}: \${${part.arg}_type}`
@@ -87,6 +101,7 @@ function fix(node, preview, tree) {
                         return [result, arg].filter(i => i !== undefined).join(", ")
                     }
 
+                    // Unnamed positional argument end syntax
                     if (part.ast_type === "positional_end") {
                         return [result, part.arg].filter(i => i !== undefined).join(", ")
                     }
@@ -100,6 +115,7 @@ function fix(node, preview, tree) {
 
                 }, undefined)
 
+            // Construct the template for the return type part of the function signature
             const return_templ = node.returns !== null
                 ? match.returntype(searchstring).trim()
                 : "\${return_type}"
@@ -107,6 +123,9 @@ function fix(node, preview, tree) {
             return `def ${node.name}(${params_templ}) -> ${return_templ}:`
         },
 
+        /*
+         * Formats the resulting template, removing parts that weren't provided
+         */
         result: (answer) => {
             for (const [type, value] of Object.entries(answer.values)) {
                 if (value === undefined) {
@@ -124,6 +143,9 @@ function fix(node, preview, tree) {
     }
 }
 
+/* 
+ * Required exports
+ */ 
 module.exports.typings_missing = {
     name: "Typings missing",
     description,
