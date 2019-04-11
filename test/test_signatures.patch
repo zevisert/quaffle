@@ -1,0 +1,172 @@
+--- ./test/test_signatures.py   2019-03-06 01:17:32.000000000 -0700
++++ ./test/test_signatures.py   2019-03-06 01:17:32.000000000 -0700
+@@ -17,1 +17,1 @@
+-def no_args():
++def no_args() -> None:
+@@ -17,2 +17,5 @@
+ def no_args():
++    """
++    A docstring
++    """
+     pass
+@@ -20,1 +20,1 @@
+-def has_arg(a):
++def has_arg(a: None) -> None:
+@@ -20,2 +20,5 @@
+ def has_arg(a):
++    """
++    A docstring
++    """
+     pass
+@@ -23,1 +23,1 @@
+-def has_args(a, b):
++def has_args(a: None, b: None) -> None:
+@@ -23,2 +23,5 @@
+ def has_args(a, b):
++    """
++    A docstring
++    """
+     pass
+@@ -26,1 +26,1 @@
+-def has_default(a=1, b = {}):
++def has_default(a: None=1, b: None={}) -> None:
+@@ -26,2 +26,5 @@
+ def has_default(a=1, b = {}):
++    """
++    A docstring
++    """
+     pass
+@@ -29,1 +29,1 @@
+-def has_complex_default_values(a, b = { 'k1': has_args('a', b={'c': 1, "d":2}) }, c=None):
++def has_complex_default_values(a: None, b: None={ 'k1': has_args('a', b={'c': 1, "d":2}) }, c: None=None) -> None:
+@@ -29,2 +29,5 @@
+ def has_complex_default_values(a, b = { 'k1': has_args('a', b={'c': 1, "d":2}) }, c=None):
++    """
++    A docstring
++    """
+     pass
+@@ -32,2 +32,5 @@
+ def has_return_type() -> None:
++    """
++    A docstring
++    """
+     pass
+@@ -35,1 +35,1 @@
+-def is_party_annotated(a: List[Any], b) -> List[Any]:
++def is_party_annotated(a: List[Any], b: None) -> List[Any]:
+@@ -35,2 +35,5 @@
+ def is_party_annotated(a: List[Any], b) -> List[Any]:
++    """
++    A docstring
++    """
+     pass
+@@ -38,3 +38,6 @@
+ @some_decorator
+ def has_decorator_and_args(a, b):
++    """
++    A docstring
++    """
+     pass
+@@ -39,1 +39,1 @@
+-def has_decorator_and_args(a, b):
++def has_decorator_and_args(a: None, b: None) -> None:
+@@ -42,2 +42,1 @@
+-def multiline_def(a,
+-                  b):
++def multiline_def(a: None, b: None) -> None:
+@@ -42,3 +42,6 @@
+ def multiline_def(a,
+                   b):
++    """
++    A docstring
++    """
+     pass
+@@ -46,2 +46,1 @@
+-def multiline_def_defaults(a,
+-                           b=None):
++def multiline_def_defaults(a: None, b: None=None) -> None:
+@@ -46,3 +46,6 @@
+ def multiline_def_defaults(a,
+                            b=None):
++    """
++    A docstring
++    """
+     pass
+@@ -50,4 +50,7 @@
+ @some_decorator
+ def multiline_def_defaults_decorator(a,
+                                      b=None):
++    """
++    A docstring
++    """
+     pass
+@@ -51,2 +51,1 @@
+-def multiline_def_defaults_decorator(a,
+-                                     b=None):
++def multiline_def_defaults_decorator(a: None, b: None=None) -> None:
+@@ -55,1 +55,1 @@
+-def has_splat(a, *args):
++def has_splat(a: None, *args: None) -> None:
+@@ -55,2 +55,5 @@
+ def has_splat(a, *args):
++    """
++    A docstring
++    """
+     pass
+@@ -58,1 +58,1 @@
+-def has_kwsplat(a, **kwargs):
++def has_kwsplat(a: None, **kwargs: None) -> None:
+@@ -58,2 +58,5 @@
+ def has_kwsplat(a, **kwargs):
++    """
++    A docstring
++    """
+     pass
+@@ -61,1 +61,1 @@
+-def has_kwonly_args(a, *args, option=False):
++def has_kwonly_args(a: None, *args: None, option: None=False) -> None:
+@@ -61,2 +61,5 @@
+ def has_kwonly_args(a, *args, option=False):
++    """
++    A docstring
++    """
+     pass
+@@ -64,1 +64,1 @@
+-def has_kwonly_unnammed_args(a, *, option=False):
++def has_kwonly_unnammed_args(a: None, *, option: None=False) -> None:
+@@ -64,2 +64,5 @@
+ def has_kwonly_unnammed_args(a, *, option=False):
++    """
++    A docstring
++    """
+     pass
+@@ -67,1 +67,1 @@
+-def has_kwargs_kwonlyargs(a, *, option=False, **kwargs):
++def has_kwargs_kwonlyargs(a: None, *, option: None=False, **kwargs: None) -> None:
+@@ -67,2 +67,5 @@
+ def has_kwargs_kwonlyargs(a, *, option=False, **kwargs):
++    """
++    A docstring
++    """
+     pass
+@@ -71,10 +71,1 @@
+-def has_everything(a,
+-                   b=None,
+-                   c = {'a': [
+-                       1,
+-                       2,
+-                       3
+-                   ]},
+-                   *args,
+-                   **kwargs) \
+--> None:
++def has_everything(a: None, b: None=None, c: None={'a': [ 1, 2, 3 ]}, *args: None, **kwargs: None) -> None:
+@@ -77,5 +77,8 @@
+                    ]},
+                    *args,
+                    **kwargs) \
+ -> None:
++    """
++    A docstring
++    """
+     pass
