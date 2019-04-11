@@ -21,6 +21,8 @@ All three of these responsibilities live in the `src/language/<your_language>` d
 ### Abstract Syntax Trees
 An abstract syntax tree is a term from language parsing, and represents a general method of representing the syntactic structure of a language. All programing languages are based on syntax trees, and thus all programs have an a some sort of syntax tree representation. Quaffle relies on this fact to parse and suggest fixes appropriate to the active language.
 
+Typically the best way for building abstract syntax trees for a given language is by utilizing the tooling for that specific language. For instance most modern languages provide some sort of introspection capabilities that allow the language to generate parsings of files in its native format. Furthermore, most of these languages support exporting to JSON in some manner or another.
+
 ### Source code annotations
 As mentioned in the [#rationale](#Rationale) section, source code annotations are a common oversight when developing code, but are one of the most useful sources of information for automatically generated documentation. Quaffle is focused on finding and helping the user to fill in the gaps in their source code.
 
